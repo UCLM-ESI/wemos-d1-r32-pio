@@ -1,8 +1,8 @@
 #include <Arduino.h>
 
-#define redLed 9
-#define greenLed 10
-#define blueLed 11
+#define redLed   D9
+#define greenLed D10
+#define blueLed  D11
 
 void setup() {
     pinMode(redLed, OUTPUT);
@@ -34,4 +34,3 @@ void loop() {
     setColor(0, 0, 0); // off
     delay(1000);
 }
-
