@@ -79,11 +79,11 @@ void setup() {
   Serial.begin(9600);
   pinMode(A0, INPUT);
   wifi_connect();
+  client.setServer(MQTT_SERVER, 1883);
 }
 
 void loop() {
   int reading = read_sensor();
-  client.setServer(MQTT_SERVER, 1883);
   send_reading(reading);
-  delay(3000);
+  delay(100);
 }
