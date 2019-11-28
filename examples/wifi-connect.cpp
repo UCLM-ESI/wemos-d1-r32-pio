@@ -1,7 +1,5 @@
 #include <Arduino.h>
 #include "WiFi.h"
-#include <analogWrite.h>
-#include "ping.h"
 
 const char* ssid = "IoTnet";
 const char* password = "darksecret";
@@ -28,5 +26,3 @@ void loop() {
 
   delay(5000);
 }
-
-

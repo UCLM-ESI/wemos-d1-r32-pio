@@ -54,17 +54,17 @@ void setup() {
   client.setServer(mqtt_server, 1883);
 }
 
+float read_temperature() {
+  return 20.3;
+}
+
 void loop() {
   if (!client.connected()) {
     mqttconnect();
   }
 
-  long now = millis();
-  if (now - last > 3000) {
-    last = now;
-    temperature = 20.3;
-    snprintf(msg, 20, "%lf", temperature);
-    client.publish(TOPIC, msg);
-    Serial.println("temp published");
-  }
+  delay(3000);
+  snprintf(msg, 20, "%lf", read_temperature());
+  client.publish(TOPIC, msg);
+  Serial.println("temp published");
 }
