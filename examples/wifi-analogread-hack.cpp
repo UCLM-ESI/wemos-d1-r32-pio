@@ -21,6 +21,8 @@ char msg[20];
 uint64_t read_ctl2;
 
 void wifi_connect() {
+  // https://github.com/espressif/arduino-esp32/issues/102
+  // https://www.gitmemory.com/issue/espressif/arduino-esp32/102/496284224
   read_ctl2 = READ_PERI_REG(SENS_SAR_READ_CTRL2_REG);
 
   Serial.println();
@@ -56,7 +58,8 @@ void mqtt_connect() {
   }
 }
 
-float read_sensor() {
+int read_sensor() {
+  WRITE_PERI_REG(SENS_SAR_READ_CTRL2_REG, read_ctl2);
   int value = analogRead(A0);
   return value;
 }
@@ -72,25 +75,15 @@ void send_reading(int reading) {
   Serial.println(reading);
 }
 
-void wifi_disconnect() {
-  // https://github.com/espressif/arduino-esp32/issues/102
-  // https://www.gitmemory.com/issue/espressif/arduino-esp32/102/496284224
-
-  esp_wifi_stop();
-
-  WRITE_PERI_REG(SENS_SAR_READ_CTRL2_REG, read_ctl2);   // fix ADC registers
-}
-
 void setup() {
   Serial.begin(9600);
   pinMode(A0, INPUT);
+  wifi_connect();
 }
 
 void loop() {
   int reading = read_sensor();
-  wifi_connect();
   client.setServer(MQTT_SERVER, 1883);
   send_reading(reading);
-  wifi_disconnect();
   delay(3000);
 }
