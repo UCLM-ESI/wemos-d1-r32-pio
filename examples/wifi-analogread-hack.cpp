@@ -1,117 +1,89 @@
-// -*- coding: utf-8; mode: c++; tab-width: 4 -*-
-
 #include <WiFi.h>
 #include <PubSubClient.h>
 
-#include <esp_int_wdt.h>
-#include <esp_task_wdt.h>
 #include "esp_wifi.h"
-#include "nvs_flash.h"
-#include "soc/soc.h"
 #include "soc/sens_reg.h"
 
 /* change it with your ssid-password */
 #define SSID        "IoTnet"
 #define PASSWORD    "darksecret"
-#define MQTT_SERVER "192.168.8.229"
 
-int reading = 0;
+#define MQTT_SERVER "192.168.8.229"
+#define MQTT_TOPIC  "esi/room1/temp"
+#define MQTT_CLIENT_ID "ESP32Client"
 
 /* create an instance of PubSubClient client */
 WiFiClient espClient;
 PubSubClient client(espClient);
 
-#define TOPIC "esi/room1/temp"
 char msg[20];
 
-uint64_t reg_a;
-uint64_t reg_b;
-uint64_t reg_c;
+uint64_t read_ctl2;
 
 void wifi_connect() {
-  reg_a = READ_PERI_REG(SENS_SAR_START_FORCE_REG);
-  reg_b = READ_PERI_REG(SENS_SAR_READ_CTRL2_REG);
-  reg_c = READ_PERI_REG(SENS_SAR_MEAS_START2_REG);
+  // https://github.com/espressif/arduino-esp32/issues/102
+  // https://www.gitmemory.com/issue/espressif/arduino-esp32/102/496284224
+  read_ctl2 = READ_PERI_REG(SENS_SAR_READ_CTRL2_REG);
 
   Serial.println();
-  Serial.print("Connecting to ");
-  Serial.println(SSID);
-  WiFi.begin(SSID, PASSWORD);
+  Serial.print("WiFi connecting to ");
+  Serial.print(SSID);
 
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(1000);
+  esp_wifi_start();
+  WiFi.begin(SSID, PASSWORD);
+  delay(500);
+
+  while (!WiFi.isConnected()) {
     Serial.print(".");
+    delay(1000);
   }
 
-  Serial.println("");
-  Serial.println("WiFi connected");
+  Serial.println("-> connected");
   Serial.print("node IP address: ");
   Serial.println(WiFi.localIP());
 }
 
 void mqtt_connect() {
   while (!client.connected()) {
-    Serial.print("MQTT connecting... ");
-    String clientId = "ESP32Client";
+    Serial.print("MQTT connecting: ");
 
-    if (client.connect(clientId.c_str())) {
-      Serial.println("connected");
+    if (client.connect(MQTT_CLIENT_ID)) {
+      Serial.println("-> connected");
     } else {
-      Serial.print("failed, status code =");
+      Serial.print("failed, status code = ");
       Serial.print(client.state());
-      Serial.println("try again in 5 seconds");
-
-      delay(5000);  //* Wait 5 seconds before retrying
+      Serial.println(", try again in 5 seconds");
+      delay(5000);
     }
   }
 }
 
-float read_sensor() {
-  adcAttachPin(A0);
+int read_sensor() {
+  WRITE_PERI_REG(SENS_SAR_READ_CTRL2_REG, read_ctl2);
   int value = analogRead(A0);
-//  Serial.println(value);
   return value;
 }
 
-void send_reading() {
+void send_reading(int reading) {
   if (!client.connected()) {
     mqtt_connect();
   }
 
   snprintf(msg, 20, "%d", reading);
-  client.publish(TOPIC, msg);
+  client.publish(MQTT_TOPIC, msg);
   Serial.print("temp published: ");
   Serial.println(reading);
 }
 
-void wifi_disconnect() {
-// https://github.com/espressif/arduino-esp32/issues/102
-
-//  WiFi.mode(WIFI_MODE_NULL);
-//  WiFi.disconnect();
-//  WiFi.mode(WIFI_MODE_NULL);
-
-  esp_wifi_stop();
-  esp_wifi_deinit();
-//  nvs_flash_deinit();
-
-  WRITE_PERI_REG(SENS_SAR_START_FORCE_REG, reg_a);  // fix ADC registers
-  WRITE_PERI_REG(SENS_SAR_READ_CTRL2_REG, reg_b);
-  WRITE_PERI_REG(SENS_SAR_MEAS_START2_REG, reg_c);
-}
-
-
 void setup() {
   Serial.begin(9600);
   pinMode(A0, INPUT);
-  reading = read_sensor();
   wifi_connect();
   client.setServer(MQTT_SERVER, 1883);
-  send_reading();
-  wifi_disconnect();
-  delay(5000);
-  ESP.restart();
 }
 
 void loop() {
+  int reading = read_sensor();
+  send_reading(reading);
+  delay(100);
 }
