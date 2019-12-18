@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <analogWrite.h>
 
 #define redLed   D9
 #define greenLed D10
