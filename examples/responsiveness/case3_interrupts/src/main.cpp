@@ -16,7 +16,7 @@ static int g_w_delay = W_DELAY_SLOW;
 static int g_rgb_delay = RGB_DELAY_SLOW;
 static int g_flash = 0;
 
-void Buttons_handleInterrupt(){
+void IRAM_ATTR Buttons_handleInterrupt(){
 
     if (digitalRead(modeSwitch) == 0){
         if(g_flash == 0)
