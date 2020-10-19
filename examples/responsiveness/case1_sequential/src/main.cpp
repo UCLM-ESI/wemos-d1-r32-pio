@@ -12,8 +12,8 @@
 #define RGB_DELAY_SLOW 25000
 #define RGB_DELAY_FAST 10000
 
-static int w_delay = W_DELAY_SLOW;
-static int rgb_delay = RGB_DELAY_SLOW;
+int w_delay = W_DELAY_SLOW;
+int rgb_delay = RGB_DELAY_SLOW;
 
 void setup() {
     pinMode(redLed, OUTPUT);
