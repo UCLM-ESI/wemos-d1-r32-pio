@@ -12,20 +12,13 @@
 #define RGB_DELAY_SLOW 25000
 #define RGB_DELAY_FAST 10000
 
-static int g_w_delay = W_DELAY_SLOW;
-static int g_rgb_delay = RGB_DELAY_SLOW;
-static int g_flash = 0;
+static volatile int g_w_delay = W_DELAY_SLOW;
+static volatile int g_rgb_delay = RGB_DELAY_SLOW;
+static volatile int g_flash = 0;
 
-void IRAM_ATTR Buttons_handleInterrupt(){
 
-    if (digitalRead(modeSwitch) == 0){
-        if(g_flash == 0)
-            g_flash = 1;
-        else
-            g_flash = 0;
-    }
 
-    
+void IRAM_ATTR sw1_handleInterrupt(){    
     if (digitalRead(speedSwitch) == 0){
         if (g_w_delay == W_DELAY_SLOW){
             g_w_delay = W_DELAY_FAST;
@@ -38,15 +31,27 @@ void IRAM_ATTR Buttons_handleInterrupt(){
     }
 }
 
+
+void IRAM_ATTR sw2_handleInterrupt(){
+    if (digitalRead(modeSwitch) == 0){
+        if(g_flash == 0)
+            g_flash = 1;
+        else
+            g_flash = 0;
+    }
+}
+
+
 void setup() {
     pinMode(redLed, OUTPUT);
     pinMode(greenLed, OUTPUT);
     pinMode(blueLed, OUTPUT);
     pinMode(speedSwitch, INPUT_PULLUP);
-    attachInterrupt(digitalPinToInterrupt(speedSwitch), Buttons_handleInterrupt, FALLING);
+    attachInterrupt(digitalPinToInterrupt(speedSwitch), sw1_handleInterrupt, FALLING);
     pinMode(modeSwitch, INPUT_PULLUP);
-    attachInterrupt(digitalPinToInterrupt(modeSwitch), Buttons_handleInterrupt, FALLING);
+    attachInterrupt(digitalPinToInterrupt(modeSwitch), sw2_handleInterrupt, FALLING);
 }
+
 
 void control_RGB_leds(unsigned char red, unsigned char green, unsigned char blue) {
     digitalWrite(redLed, red);
@@ -63,6 +68,7 @@ void Delay(uint32_t t)
         while(n--);
     }
 }
+
 
 void Task_RGB()
 {
@@ -95,6 +101,7 @@ void Task_RGB()
     }
   }
 }
+
 
 void Task_Flash()
 {
