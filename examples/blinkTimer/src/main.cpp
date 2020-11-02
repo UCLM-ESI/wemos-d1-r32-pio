@@ -41,19 +41,19 @@ void setup() {
   pinMode(D13, OUTPUT);
   gpio_set_level(GPIO_NUM_18, 0);
 
-  timer_config_t config = {
-        TIMER_ALARM_EN, 
-        TIMER_PAUSE, 
-        TIMER_INTR_LEVEL,
-        TIMER_COUNT_UP, 
-        true, 
-        7999}; 
+  timer_config_t config; 
+    config.alarm_en = TIMER_ALARM_EN; 
+    config.counter_en = TIMER_PAUSE; 
+    config.intr_type = TIMER_INTR_LEVEL;
+    config.counter_dir = TIMER_COUNT_UP; 
+    config.auto_reload = true; 
+    config.divider = 8000; 
 
   
   timer_init(TIMER_GROUP_0,TIMER_0,&config);
 
   timer_set_counter_value(TIMER_GROUP_0, TIMER_0, 0x00000000ULL);
-  //timer_set_divider(TIMER_GROUP_0, TIMER_0, 7999);
+  //timer_set_divider(TIMER_GROUP_0, TIMER_0, 8000);
 
   timer_set_alarm_value(TIMER_GROUP_0, TIMER_0, 10000);
   //timer_set_alarm(TIMER_GROUP_0, TIMER_0, TIMER_ALARM_EN);
@@ -69,7 +69,7 @@ void setup() {
   pinMode(D13, OUTPUT);
   digitalWrite(D13,0);
 
-  timer = timerBegin(0, 7999, true);
+  timer = timerBegin(0, 8000, true);
   timerAttachInterrupt(timer, &timeout_handler, true);
   timerAlarmWrite(timer, 10000, true);
   timerAlarmEnable(timer);
