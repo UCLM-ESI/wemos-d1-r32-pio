@@ -45,7 +45,7 @@ void vTask3(void* pvParam)
 }
 
 
-void app_main2() 
+void app_main() 
 {
   pinMode(D9, OUTPUT);
   pinMode(D10, OUTPUT);
@@ -53,36 +53,18 @@ void app_main2()
   pinMode(D12, OUTPUT);
   pinMode(D13, OUTPUT);
 
-/*
-  xTaskCreate(vTask1, "Task 1", 1500, NULL, 10, NULL);
-  xTaskCreate(vTask2, "Task 2", 1500, NULL, 1, NULL);
-  xTaskCreate(vTask3, "Task 3", 1500, NULL, 5, NULL);
-*/
-
   xTaskCreatePinnedToCore(vTask1, "Task 1", 1500, NULL, 5, NULL,0);
   xTaskCreatePinnedToCore(vTask2, "Task 2", 1500, NULL, 1, NULL,0);
   xTaskCreatePinnedToCore(vTask3, "Task 3", 1500, NULL, 10, NULL,0);
 
-
- /*
-  xTaskCreate(vTaskFunction, "Task 1", 1500, (void*)pcTextForTask1, 10, NULL);
-  xTaskCreate(vTaskFunction, "Task 2", 1500, (void*)pcTextForTask2, 1, NULL);
-  xTaskCreate(vTaskFunction, "Task 3", 1500, (void*)pcTextForTask3, 5, NULL);
-*/
-/*
-  xTaskCreatePinnedToCore(vTaskFunction, "Task 1", 1500, (void*)pcTextForTask1, 10, NULL, 0);
-  xTaskCreatePinnedToCore(vTaskFunction, "Task 2", 1500, (void*)pcTextForTask2, 1, NULL, 0);
-  xTaskCreatePinnedToCore(vTaskFunction, "Task 3", 1500, (void*)pcTextForTask3, 5, NULL, 0);*/
-  vTaskStartScheduler();
+  // vTaskStartScheduler();
 }
 
 void setup() {
   // put your setup code here, to run once:
-  //Serial.begin(115200);
-  app_main2();
+  app_main();
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  //app_main();
 }
