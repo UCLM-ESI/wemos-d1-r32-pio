@@ -8,12 +8,10 @@
 const char* ssid = "IoTnet";
 const char* password = "darksecret";
  
- 
-void setup() {
-  Serial.begin(115200);
-  delay(4000);
+void wifiConnect()
+{
   WiFi.begin(ssid, password);
- 
+  
   while (WiFi.status() != WL_CONNECTED) {
     delay(1000);
     Serial.println("Connecting to WiFi..");
@@ -23,13 +21,20 @@ void setup() {
   Serial.print("IP Address: ");
   Serial.println(WiFi.localIP());
 }
+
+ 
+void setup() {
+  Serial.begin(115200);
+  delay(4000);
+  wifiConnect();
+}
  
 void loop() {
   if ((WiFi.status() == WL_CONNECTED)) {
  
     HTTPClient http;
  
-    http.begin("http://192.168.43.231:8000/hello.txt");
+    http.begin("http://192.168.0.102:8000/hello.txt");
     int httpCode = http.GET();
  
     if (httpCode > 0) {
