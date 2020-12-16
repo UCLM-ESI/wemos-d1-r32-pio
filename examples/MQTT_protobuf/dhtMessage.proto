@@ -1,0 +1,6 @@
+syntax = "proto2";
+
+message dhtMessage {
+  optional float t = 1;
+  optional float h = 2;
+}

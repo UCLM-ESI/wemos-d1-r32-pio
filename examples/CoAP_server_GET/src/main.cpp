@@ -2,10 +2,10 @@
 #include <WiFi.h>
 #include <WiFiUdp.h>
 #include <coap-simple.h>
-#include <coap_server.h>
+
  
-const char* ssid = "lanHome10";//"IoTnet";
-const char* password = "@lanhome10";//"darksecret";
+const char* ssid = "IoTnet";
+const char* password = "darksecret";
 
 
 // UDP and CoAP class
