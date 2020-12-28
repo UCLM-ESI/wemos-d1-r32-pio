@@ -28,7 +28,7 @@ void setup() {
   display.setTextColor(WHITE);
   display.setCursor(1,0);
   display.clearDisplay();
-  display.println("Hello World!");
+  display.println(F("Hello World!"));
   display.display();
 
 }
