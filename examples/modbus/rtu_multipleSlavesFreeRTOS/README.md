@@ -1,6 +1,6 @@
-# Modbus RTU (Master-Multiple Slaves)
+# Modbus RTU (Master-Multiple Slaves FreeRTOS)
 
-Note: Responsiveness is not good
+Note: Responsiveness is better than Master-Multiple Slaves
 
 ## Master
 ### Input

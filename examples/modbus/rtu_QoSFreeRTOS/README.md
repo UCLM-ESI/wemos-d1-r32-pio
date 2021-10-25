@@ -1,6 +1,6 @@
-# Modbus RTU (Master-Multiple Slaves)
+# Modbus RTU (Master-Multiple Slaves QoS FreeRTOS)
 
-Note: Responsiveness is not good
+Note: QoS is obtained by modifying the priority of the tasks
 
 ## Master
 ### Input
