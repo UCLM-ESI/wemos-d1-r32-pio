@@ -13,7 +13,7 @@
 
 ## Slave
 ### Input
-* D2 -> ON: Switch ON/OFF the D13 LED of Master
+* D2 -> ON/OFF Master: Switch ON/OFF the D13 LED of Master
 
 ### Output
 * D13 -> LED: It is switched ON/OFF in accordace with the SW1 and SW2 of the Master
