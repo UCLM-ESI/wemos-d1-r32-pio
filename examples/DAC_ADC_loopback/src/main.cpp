@@ -34,7 +34,7 @@ void loop() {
   int val = analogRead(GPIO_NUM_34);
 #endif
 
-  Serial.printf("Read val: %d\n",val);
+  Serial.printf("Read val: %d\r\n",val);
 
   delay(1000);
   volt += delta;
