@@ -234,13 +234,13 @@
     "list": []
   },
   "time": {
-    "from": "2021-12-25T07:33:21.414Z",
-    "to": "2021-12-25T19:33:21.418Z"
+    "from": "now-5m",
+    "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "My dashboard",
   "uid": "NxWwpxT7k",
-  "version": 3,
+  "version": 1,
   "weekStart": ""
 }

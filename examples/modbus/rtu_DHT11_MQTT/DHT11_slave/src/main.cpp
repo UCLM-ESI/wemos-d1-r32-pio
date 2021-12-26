@@ -80,8 +80,8 @@ void setup() {
 
   delay(4000);
 
-  xTaskCreate( vTaskTemperature, "Temperature", 4000, NULL, 1, NULL);
-  xTaskCreate( vTaskHumidity, "Humidity", 4000, NULL, 1, NULL);
+  xTaskCreatePinnedToCore( vTaskTemperature, "Temperature", 4000, NULL, 1, NULL, 1);
+  xTaskCreatePinnedToCore( vTaskHumidity, "Humidity", 4000, NULL, 1, NULL, 1);
 }
 
 
