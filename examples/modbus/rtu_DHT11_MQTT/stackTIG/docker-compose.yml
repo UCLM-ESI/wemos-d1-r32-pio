@@ -1,0 +1,62 @@
+version: "3"
+
+services:
+  nodeInfluxdb:
+    image: influxdb:latest
+    container_name: influxdb
+    restart: always
+    networks:
+      - mybridge
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=admin
+      - DOCKER_INFLUXDB_INIT_PASSWORD=admin1234
+      - DOCKER_INFLUXDB_INIT_ORG=ARCO
+      - DOCKER_INFLUXDB_INIT_BUCKET=sensors
+      - DOCKER_INFLUXDB_INIT_RETENTION=1w
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=randomTokenValue
+    ports:
+      - "8086:8086"
+    
+  nodeBroker:
+    image: eclipse-mosquitto:latest
+    container_name: broker
+    depends_on:
+      - "nodeInfluxdb"
+    volumes:
+      - ./Mosquitto/broker.conf:/mosquitto/config/mosquitto.conf
+    networks:
+      - mybridge
+    ports:
+      - "2883:1883"
+    
+  nodeTelegraf:
+    image: telegraf:latest
+    container_name: telegraf
+    environment:    
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=randomTokenValue
+    depends_on:
+      - "nodeBroker"
+    volumes:
+      - ./Telegraf/telegraf.conf:/etc/telegraf/telegraf.conf
+    networks:
+      - mybridge
+
+  nodeGrafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    environment:    
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=randomTokenValue
+    volumes:
+      - ./Grafana/provisioning:/etc/grafana/provisioning
+      - ./Grafana/dashboards:/etc/grafana/dashboards
+    networks:
+      - mybridge
+    ports:
+      - "3000:3000"
+    
+    
+networks:
+  mybridge:
+    driver: bridge
+  

@@ -1,0 +1,15 @@
+# config file version
+apiVersion: 1
+
+providers:
+- name: My dashboard
+  org_id: 1
+  folder: ''
+  type: 'file'
+  disableDeletion: false
+  editable: true
+  updateIntervalSeconds: 5
+  allowUiUpdates: true
+  options:
+    path: /etc/grafana/dashboards
+    foldersFromFilesStructure: true
