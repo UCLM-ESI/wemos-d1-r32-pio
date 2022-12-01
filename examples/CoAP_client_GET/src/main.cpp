@@ -51,7 +51,7 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   
-  uint16_t packet_id = coap.get(IPAddress(192,168,1,103), 5683, "hello");
+  uint16_t packet_id = coap.get(IPAddress(192,168,3,106), 5683, "hello");
   printf("Packet ID: %d\r\n", packet_id);
   delay(500);
   coap.loop();

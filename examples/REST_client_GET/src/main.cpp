@@ -34,7 +34,7 @@ void loop() {
  
     HTTPClient http;
  
-    http.begin("http://192.168.0.102:8000/hello.txt");
+    http.begin("http://192.168.3.106:8000/hello.txt");
     int httpCode = http.GET();
  
     if (httpCode > 0) {

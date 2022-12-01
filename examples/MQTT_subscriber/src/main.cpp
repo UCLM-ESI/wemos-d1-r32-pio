@@ -7,7 +7,7 @@ const char* ssid = "IoTnet";
 const char* password = "darksecret";
 
 #define TOPIC "esi/room1/notices"
-#define BROKER_IP "192.168.1.103"
+#define BROKER_IP "192.168.3.106"
 #define BROKER_PORT 2883
 
 WiFiClient espClient;
@@ -32,7 +32,7 @@ void mqttConnect() {
   while (!client.connected()) {
     Serial.print("MQTT connecting ...");
 
-    if (client.connect("ESP32Client0")) {
+    if (client.connect("ESP32Client0-JCJ")) {
       Serial.println("connected");
     } else {
       Serial.print("failed, status code =");

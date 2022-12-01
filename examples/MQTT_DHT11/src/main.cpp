@@ -8,7 +8,7 @@ const char* ssid = "IoTnet";
 const char* password =  "darksecret";
 
 #define TOPIC "esi/room1/temp"
-#define BROKER_IP "192.168.0.102"
+#define BROKER_IP "192.168.3.106"
 #define BROKER_PORT 2883
 
 WiFiClient espClient;

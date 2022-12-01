@@ -24,7 +24,7 @@ void setup() {
   display.clearDisplay();
 
   
-  display.setTextSize(1);
+  display.setTextSize(2);
   display.setTextColor(WHITE);
   display.setCursor(1,0);
   display.clearDisplay();

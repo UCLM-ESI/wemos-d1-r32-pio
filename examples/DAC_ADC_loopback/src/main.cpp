@@ -2,8 +2,9 @@
 #include <driver/dac.h>
 #include <driver/adc.h>
 
+#define DAC_CHANNEL_2_GPIO_NUM 26
 
-//#define ESPIDF
+#define ESPIDF
 
 static char volt = 0;
 static char delta = 10;
